@@ -1,0 +1,37 @@
+Полный список кураторов
+***********************
+Curator{rang='Доктор' Surname='Борменталь' sex='MALE'} 
+Curator{rang='Профессор' Surname='Преображенский' sex='MALE'} 
+
+Полный список групп
+*******************
+Group{groupId=1, groupName='Первая', curator=Curator{rang='Доктор' Surname='Борменталь' sex='MALE'} , speciality='Создание собачек из человеков'}
+Group{groupId=2, groupName='Вторая', curator=Curator{rang='Профессор' Surname='Преображенский' sex='MALE'} , speciality='Создание человеков из собачек'}
+
+Полный список студентов
+***********************
+Student{studentId=1, educationYear=2006} Person{name='Иван', midname='Сергеевич', surname='Степанов', bDate=20.04.90, sex=MALE, groupid=2}
+Student{studentId=2, educationYear=2006} Person{name='Наталья', midname='Андреевна', surname='Чичикова', bDate=10.07.90, sex=FEMALE, groupid=2}
+Student{studentId=3, educationYear=2006} Person{name='Петр', midname='Викторович', surname='Сушкин', bDate=12.04.91, sex=MALE, groupid=1}
+Student{studentId=4, educationYear=2006} Person{name='Вероника', midname='Сергеевна', surname='Ковалева', bDate=19.08.91, sex=FEMALE, groupid=1}
+
+Список студентов по группам
+***************************
+---> Группа:Первая
+Student{studentId=3, educationYear=2006} Person{name='Петр', midname='Викторович', surname='Сушкин', bDate=12.04.91, sex=MALE, groupid=1}
+Student{studentId=4, educationYear=2006} Person{name='Вероника', midname='Сергеевна', surname='Ковалева', bDate=19.08.91, sex=FEMALE, groupid=1}
+---> Группа:Вторая
+Student{studentId=1, educationYear=2006} Person{name='Иван', midname='Сергеевич', surname='Степанов', bDate=20.04.90, sex=MALE, groupid=2}
+Student{studentId=2, educationYear=2006} Person{name='Наталья', midname='Андреевна', surname='Чичикова', bDate=10.07.90, sex=FEMALE, groupid=2}
+Добавление студента:Student{studentId=5, educationYear=2006} Person{name='Игорь', midname='Владимирович', surname='Перебежкин', bDate=01.10.91, sex=MALE, groupid=1}
+********************
+
+Список студентов по группам
+***************************
+---> Группа:Первая
+Student{studentId=3, educationYear=2006} Person{name='Петр', midname='Викторович', surname='Сушкин', bDate=12.04.91, sex=MALE, groupid=1}
+Student{studentId=4, educationYear=2006} Person{name='Вероника', midname='Сергеевна', surname='Ковалева', bDate=19.08.91, sex=FEMALE, groupid=1}
+Student{studentId=5, educationYear=2006} Person{name='Игорь', midname='Владимирович', surname='Перебежкин', bDate=01.10.91, sex=MALE, groupid=1}
+---> Группа:Вторая
+Student{studentId=1, educationYear=2006} Person{name='Иван', midname='Сергеевич', surname='Степанов', bDate=20.04.90, sex=MALE, groupid=2}
+Student{studentId=2, educationYear=2006} Person{name='Наталья', midname='Андреевна', surname='Чичикова', bDate=10.07.90, sex=FEMALE, groupid=2}
