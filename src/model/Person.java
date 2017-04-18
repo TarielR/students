@@ -14,7 +14,7 @@ public class Person implements Comparable {
     private String midname;
     private Date bDate;
     private Sex sex;
-    private int groupid;
+
 
     public Person(ResultSet rs) throws SQLException {
         setName(rs.getString(2));
@@ -46,10 +46,6 @@ public class Person implements Comparable {
 
     public void setSex(Sex sex) { this.sex = sex; }
 
-    public int getGroupid() { return groupid; }
-
-    public void setGroupid(int groupid) { this.groupid = groupid; }
-
 
     @Override
     public int compareTo(Object obj) {
@@ -66,7 +62,6 @@ public class Person implements Comparable {
                 ", surname='" + surname + '\'' +
                 ", bDate=" + SimpleDateFormat.getDateInstance(DateFormat.SHORT).format(bDate) +
                 ", sex=" + sex +
-                ", groupid=" + groupid +
                 '}';
     }
 }
