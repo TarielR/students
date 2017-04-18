@@ -9,7 +9,7 @@ public class Curator extends Person {
 
     public Curator() { }
 
-    public Curator(ResultSet rs, String rang) throws SQLException {
+    public Curator(ResultSet rs) throws SQLException {
         super(rs);
         setRang(rs.getString(3));
     }
@@ -21,7 +21,7 @@ public class Curator extends Person {
     public String toString() {
         return "Curator{" +
                 "rang='" + rang + "\' " +
-                "Surname='" + super.getSurname() + "\' " +
+                "Surname='" + super.getSurName() + "\' " +
                 "sex='" + super.getSex() + '\'' +
                 "} " ;
     }

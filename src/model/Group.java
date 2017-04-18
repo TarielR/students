@@ -1,11 +1,23 @@
 package model;
 
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
 public class Group {
     private int groupId;
     private String groupName;
-    private Curator curator;
+    private int curator;
     private String speciality;
+
+    public Group(ResultSet rs) throws SQLException {
+        setGroupId(rs.getInt(1));
+        setGroupName(rs.getString(2));
+        setCurator(rs.getInt(3));
+        setSpeciality(rs.getString(4));
+    }
+
+    public Group() {  }
 
     public int getGroupId() { return groupId; }
 
@@ -15,9 +27,9 @@ public class Group {
 
     public void setGroupName(String groupName) { this.groupName = groupName; }
 
-    public Curator getCurator() { return curator; }
+    public int getCurator() { return curator; }
 
-    public void setCurator(Curator curator) { this.curator = curator; }
+    public void setCurator(int curatorId) { this.curator = curator; }
 
     public String getSpeciality() { return speciality; }
 

@@ -9,38 +9,38 @@ import java.util.Date;
 import java.util.Locale;
 
 public class Person implements Comparable {
-    private String name;
-    private String surname;
-    private String midname;
-    private Date bDate;
+    private String firstName;
+    private String surName;
+    private String midleName;
+    private Date dateOfBirth;
     private Sex sex;
 
 
     public Person(ResultSet rs) throws SQLException {
-        setName(rs.getString(2));
-        setSurname(rs.getString(3));
-        setMidname(rs.getString(4));
-        setbDate(rs.getDate(5));
+        setFirstName(rs.getString(2));
+        setSurName(rs.getString(3));
+        setMidleName(rs.getString(4));
+        setDateOfBirth(rs.getDate(5));
 
     }
 
     public Person() { }
 
-    public String getName() { return name; }
+    public String getFirstName() { return firstName; }
 
-    public void setName(String name) { this.name = name; }
+    public void setFirstName(String firstName) { this.firstName = firstName; }
 
-    public String getSurname() { return surname; }
+    public String getSurName() { return surName; }
 
-    public void setSurname(String surname) { this.surname = surname; }
+    public void setSurName(String surName) { this.surName = surName; }
 
-    public String getMidname() { return midname; }
+    public String getMidleName() { return midleName; }
 
-    public void setMidname(String midname) { this.midname = midname; }
+    public void setMidleName(String midleName) { this.midleName = midleName; }
 
-    public Date getbDate() { return bDate; }
+    public Date getDateOfBirth() { return dateOfBirth; }
 
-    public void setbDate(Date bDate) { this.bDate = bDate; }
+    public void setDateOfBirth(Date dateOfBirth) { this.dateOfBirth = dateOfBirth; }
 
     public Sex getSex() { return sex; }
 
@@ -57,10 +57,10 @@ public class Person implements Comparable {
     @Override
     public String toString() {
         return "Person{" +
-                "name='" + name + '\'' +
-                ", midname='" + midname + '\'' +
-                ", surname='" + surname + '\'' +
-                ", bDate=" + SimpleDateFormat.getDateInstance(DateFormat.SHORT).format(bDate) +
+                "firstName='" + firstName + '\'' +
+                ", midleName='" + midleName + '\'' +
+                ", surName='" + surName + '\'' +
+                ", dateOfBirth=" + SimpleDateFormat.getDateInstance(DateFormat.SHORT).format(dateOfBirth) +
                 ", sex=" + sex +
                 '}';
     }

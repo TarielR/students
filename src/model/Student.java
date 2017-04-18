@@ -5,7 +5,7 @@ import java.sql.SQLException;
 
 public class Student extends Person {
     private int studentId;
-    private int groupid;
+    private int groupId;
     private int educationYear;
 
     public Student() {
@@ -26,15 +26,16 @@ public class Student extends Person {
 
     public void setStudentId(int studentId) { this.studentId = studentId; }
 
-    public int getGroupid() { return groupid; }
+    public int getGroupId() { return groupId; }
 
-    public void setGroupid(int groupid) { this.groupid = groupid; }
+    public void setGroupId(int groupId) { this.groupId = groupId; }
 
 
     @Override
     public String toString() {
         return "Student{" +
                 "studentId=" + studentId +
+                ", groupId=" + groupId +
                 ", educationYear=" + educationYear +
                 "} " + super.toString();
     }

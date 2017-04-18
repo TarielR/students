@@ -2,22 +2,26 @@ package model;
 
 import java.io.FileNotFoundException;
 import java.io.PrintStream;
+import java.sql.*;
 import java.util.*;
 
 public class ManagementSystem {
     private static ManagementSystem instance;
-    private Set<Student> students;
-    private List<Curator> curators;
-    private List<Group> groups;
+    private static Connection con;
 
-    private ManagementSystem() {
-        loadCurators();
-        loadGroups();
-        loadStudents();
-
+    private ManagementSystem() throws Exception {
+        try {
+            Class.forName("org.h2.Driver");
+            String url = "jdbc:h2:file:E:/proj/WebApp/lib.mv.db";
+            con = DriverManager.getConnection(url, "sa", "");
+        } catch (SQLException e) {
+            throw new Exception(e);
+        } catch (ClassNotFoundException e) {
+            throw new Exception(e);
+        }
     }
 
-    public static synchronized ManagementSystem getInstance() {
+    public static synchronized ManagementSystem getInstance() throws Exception {
         if (instance == null)
             instance = new ManagementSystem();
         return instance;
@@ -37,51 +41,51 @@ public class ManagementSystem {
         // Вторая группа
         s = new Student();
         s.setStudentId(1);
-        s.setName("Иван");
-        s.setMidname("Сергеевич");
-        s.setSurname("Степанов");
+        s.setFirstName("Иван");
+        s.setMidleName("Сергеевич");
+        s.setSurName("Степанов");
         s.setSex(Sex.MALE);
         c.set(1990, 3, 20);
-        s.setbDate(c.getTime());
-        s.setGroupid(2);
+        s.setDateOfBirth(c.getTime());
+        s.setGroupId(2);
         s.setEducationYear(2006);
         students.add(s);
 
         s = new Student();
         s.setStudentId(2);
-        s.setName("Наталья");
-        s.setMidname("Андреевна");
-        s.setSurname("Чичикова");
+        s.setFirstName("Наталья");
+        s.setMidleName("Андреевна");
+        s.setSurName("Чичикова");
         s.setSex(Sex.FEMALE);
         c.set(1990, 6, 10);
-        s.setbDate(c.getTime());
-        s.setGroupid(2);
+        s.setDateOfBirth(c.getTime());
+        s.setGroupId(2);
         s.setEducationYear(2006);
         students.add(s);
 
         // Первая группа
         s = new Student();
         s.setStudentId(3);
-        s.setName("Петр");
-        s.setMidname("Викторович");
-        s.setSurname("Сушкин");
+        s.setFirstName("Петр");
+        s.setMidleName("Викторович");
+        s.setSurName("Сушкин");
         s.setSex(Sex.MALE);
         c.set(1991, 3, 12);
-        s.setbDate(c.getTime());
+        s.setDateOfBirth(c.getTime());
         s.setEducationYear(2006);
-        s.setGroupid(1);
+        s.setGroupId(1);
         students.add(s);
 
         s = new Student();
         s.setStudentId(4);
-        s.setName("Вероника");
-        s.setMidname("Сергеевна");
-        s.setSurname("Ковалева");
+        s.setFirstName("Вероника");
+        s.setMidleName("Сергеевна");
+        s.setSurName("Ковалева");
         s.setSex(Sex.FEMALE);
         c.set(1991, 7, 19);
-        s.setbDate(c.getTime());
+        s.setDateOfBirth(c.getTime());
         s.setEducationYear(2006);
-        s.setGroupid(1);
+        s.setGroupId(1);
         students.add(s);
     }
 
@@ -94,13 +98,13 @@ public class ManagementSystem {
         Curator c = null;
 
         c = new Curator();
-        c.setSurname("Борменталь");
+        c.setSurName("Борменталь");
         c.setRang("Доктор");
         c.setSex(Sex.MALE);
         curators.add(c);
 
         c = new Curator();
-        c.setSurname("Преображенский");
+        c.setSurName("Преображенский");
         c.setRang("Профессор");
         c.setSex(Sex.MALE);
         curators.add(c);
@@ -130,34 +134,43 @@ public class ManagementSystem {
     }
 
     // Перевести студентов из одной группы с одним годом обучения в другую группу с другим годом обучения
-    public void moveStudentsToGroup(Group oldGroup, int oldYear, Group newGroup, int newYear) {
-        for (Student si : students) {
-            if (si.getGroupid() == oldGroup.getGroupId() && si.getEducationYear() == oldYear) {
-                si.setGroupid(newGroup.getGroupId());
-                si.setEducationYear(newYear);
-            }
+    public void moveStudentsToGroup(Group oldGroup, int oldYear, Group newGroup, int newYear) throws SQLException {
+        PreparedStatement stmn = null;
+
+        try {
+            stmn = con.prepareStatement(
+                    "UPDATE STUDENTS SET GROUP_ID=?, EDUCATIONYEAR=? WHERE GROUP_ID=? AND EDUCATIONYEAR=?"
+            );
+            stmn.setInt(1, newGroup.getGroupId());
+            stmn.setInt(2, newYear);
+            stmn.setInt(3, oldGroup.getGroupId());
+            stmn.setInt(4, oldYear);
+            stmn.execute();
+        } finally {
+            if (stmn != null)
+                stmn.close();
         }
     }
 
     // Удалить всех студентов из определенной группы
-    public void removeStudentsFromGroup(Group group, int year) {
-        // Мы создадим новый список студентов БЕЗ тех, кого мы хотим удалить.
-        // Возможно не самый интересный вариант. Можно было бы продемонстрировать
-        // более элегантный метод, но он требует погрузиться в коллекции более глубоко
-        // Здесь мы не ставим себе такую цель
-        Set<Student> tmp = new TreeSet<Student>();
-        for (Student si : students) {
-            if (si.getGroupid() != group.getGroupId() || si.getEducationYear() != year) {
-                tmp.add(si);
+    public void removeStudentsFromGroup(Group group, int year) throws  SQLException {
+        PreparedStatement stmt = null;
+        try {
+            stmt = con.prepareStatement(
+                    "DELETE FROM STUDENTS WHERE group_id=? AND educationYear=?");
+            stmt.setInt(1, group.getGroupId());
+            stmt.setInt(2, year);
+            stmt.execute();
+        } finally {
+            if (stmt != null) {
+                stmt.close();
             }
         }
-        students = tmp;
     }
 
     // Добавить студента
     public void insertStudent(Student student) {
-        // Просто добавляем объект в коллекцию
-        students.add(student);
+
     }
 
     // Обновить данные о студенте
@@ -171,12 +184,12 @@ public class ManagementSystem {
                 break;
             }
         }
-        updStudent.setName(student.getName());
-        updStudent.setMidname(student.getMidname());
-        updStudent.setSurname(student.getSurname());
+        updStudent.setFirstName(student.getFirstName());
+        updStudent.setMidleName(student.getMidleName());
+        updStudent.setSurName(student.getSurName());
         updStudent.setSex(student.getSex());
-        updStudent.setbDate(student.getbDate());
-        updStudent.setGroupid(student.getGroupid());
+        updStudent.setDateOfBirth(student.getDateOfBirth());
+        updStudent.setGroupId(student.getGroupId());
         updStudent.setEducationYear(student.getEducationYear());
     }
 
@@ -195,21 +208,88 @@ public class ManagementSystem {
     }
 
     // Получить список студентов для определенной группы
-    public Set<Student> getStudentsFromGroup(Group group, int year) {
-        Set<Student> l = new TreeSet<>();
-        for (Student si : students) {
-            if (si.getGroupid() == group.getGroupId() && si.getEducationYear() == year) {
-                l.add(si);
+    public Set<Student> getStudentsFromGroup(Group group, int year) throws SQLException {
+        Set<Student> students = new TreeSet<>();
+        PreparedStatement stmn = null;
+        ResultSet rs = null;
+
+        try {
+            stmn = con.prepareStatement("SELECT * FROM STUDENTS WHERE GROUP_ID=? AND EDUCATIONYEAR=? ORDER BY SURNAME");
+            stmn.setInt(1, group.getGroupId());
+            stmn.setInt(2, year);
+            rs = stmn.executeQuery();
+            while (rs.next()) {
+                Student st = new Student(rs);
+                students.add(st);
             }
+        } finally {
+            if (rs != null)
+                rs.close();
+            if (stmn != null)
+                stmn.close();
         }
-        return l;
+        return students;
     }
 
-    public List<Group> getGroups() { return groups; }
+    public List<Group> getGroups() throws SQLException {
+        List<Group> groups = new ArrayList<>();
+        Statement stmn = null;
+        ResultSet rs = null;
+        try {
+            stmn = con.createStatement();
+            rs = stmn.executeQuery("SELECT * FROM GROUPS");
+            while(rs.next()) {
+                Group gr = new Group(rs);
+                groups.add(gr);
+            }
+        } finally {
+            if (rs != null)
+                rs.close();
+            if (stmn != null)
+                stmn.close();
+        }
+        return groups;
+    }
 
-    public List<Curator> getCurators() { return curators; }
+    public List<Curator> getCurators() throws SQLException {
+        List<Curator> curators = new ArrayList<>();
+        Statement stmn = null;
+        ResultSet rs = null;
+        try {
+            stmn = con.createStatement();
+            rs = stmn.executeQuery("SELECT * FROM CURATORS");
+            while(rs.next()) {
+                Curator cr = new Curator(rs);
+                curators.add(cr);
+            }
+        } finally {
+            if (rs != null)
+                rs.close();
+            if (stmn != null)
+                stmn.close();
+        }
+        return curators;
+    }
 
-    public Set<Student> getAllStudents() { return students; }
+    public Set<Student> getAllStudents() throws SQLException {
+        Set<Student> students = new TreeSet<>();
+        Statement stmn = null;
+        ResultSet rs = null;
+        try {
+            stmn = con.createStatement();
+            rs = stmn.executeQuery("SELECT * FROM STUDENTS");
+            while (rs.next()) {
+                Student st = new Student(rs);
+                students.add(st);
+            }
+        } finally {
+            if (rs != null)
+                rs.close();
+            if (stmn != null)
+                stmn.close();
+        }
+        return students;
+    }
 
     public static void main(String[] args) {
         // Этот код позволяет нам перенаправить стандартный вывод в файл т.к. на экран выводится не совсем
@@ -261,14 +341,14 @@ public class ManagementSystem {
 
         Student s = new Student();
         s.setStudentId(5);
-        s.setName("Игорь");
-        s.setMidname("Владимирович");
-        s.setSurname("Перебежкин");
+        s.setFirstName("Игорь");
+        s.setMidleName("Владимирович");
+        s.setSurName("Перебежкин");
         s.setSex(Sex.MALE);
         Calendar c = Calendar.getInstance();
         c.set(1991, 8, 31);
-        s.setbDate(c.getTime());
-        s.setGroupid(1);
+        s.setDateOfBirth(c.getTime());
+        s.setGroupId(1);
         s.setEducationYear(2006);
         System.out.println("Добавление студента:" + s);
         System.out.println("********************");
