@@ -1,5 +1,7 @@
 package model;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.text.Collator;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -13,6 +15,16 @@ public class Person implements Comparable {
     private Date bDate;
     private Sex sex;
     private int groupid;
+
+    public Person(ResultSet rs) throws SQLException {
+        setName(rs.getString(2));
+        setSurname(rs.getString(3));
+        setMidname(rs.getString(4));
+        setbDate(rs.getDate(5));
+
+    }
+
+    public Person() { }
 
     public String getName() { return name; }
 
