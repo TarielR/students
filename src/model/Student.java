@@ -1,8 +1,21 @@
 package model;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
 public class Student extends Person {
     private int studentId;
     private int educationYear;
+
+    public Student() {
+        super();
+    }
+
+    public Student(ResultSet rs) throws SQLException {
+        super(rs);
+        setStudentId(rs.getInt(1));
+        setEducationYear(rs.getDate(8).toLocalDate().getYear());
+    }
 
     public int getEducationYear() { return educationYear; }
 
