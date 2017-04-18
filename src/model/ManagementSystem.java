@@ -26,7 +26,7 @@ public class ManagementSystem {
     private void loadStudents() {
         if (students == null) {
             // Мы используем коллекцию, которая автоматически сортирует свои элементы
-            students = new TreeSet<Student>();
+            students = new TreeSet<>();
         } else {
             students.clear();
         }
@@ -87,7 +87,7 @@ public class ManagementSystem {
 
     private void loadCurators() {
         if (curators == null)
-            curators = new ArrayList<Curator>();
+            curators = new ArrayList<>();
         else
             curators.clear();
 
