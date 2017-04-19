@@ -15,7 +15,7 @@ public class Student extends Person {
     public Student(ResultSet rs) throws SQLException {
         super(rs);
         setStudentId(rs.getInt(1));
-        setEducationYear(rs.getDate(8).toLocalDate().getYear());
+        setEducationYear(rs.getInt(8));
     }
 
     public int getEducationYear() { return educationYear; }

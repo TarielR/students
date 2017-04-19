@@ -29,7 +29,7 @@ public class Group {
 
     public int getCurator() { return curator; }
 
-    public void setCurator(int curatorId) { this.curator = curator; }
+    public void setCurator(int curatorId) { this.curator = curatorId; }
 
     public String getSpeciality() { return speciality; }
 
@@ -38,8 +38,7 @@ public class Group {
 
     @Override
     public String toString() {
-        return "Group{" +
-                "groupId=" + groupId +
+        return  "groupId=" + groupId +
                 ", groupName='" + groupName + '\'' + '\n' +
                 ", curator=" + curator +
                 ", speciality='" + speciality + '\'' +
