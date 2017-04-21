@@ -1,10 +1,8 @@
 package model;
 
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-import java.util.TreeSet;
+import java.sql.Date;
+import java.util.*;
 
 public class ManagementSystem {
     private static ManagementSystem instance;
@@ -118,8 +116,8 @@ public class ManagementSystem {
     }
 
     // Получить список студентов для определенной группы
-    public Set<Student> getStudentsFromGroup(Group group, int year) throws SQLException {
-        Set<Student> students = new TreeSet<>();
+    public Collection<Student> getStudentsFromGroup(Group group, int year) throws SQLException {
+        Collection<Student> students = new Vector<>();
         PreparedStatement stmn = null;
         ResultSet rs = null;
 
@@ -181,8 +179,8 @@ public class ManagementSystem {
         return curators;
     }
 
-    public Set<Student> getAllStudents() throws SQLException {
-        Set<Student> students = new TreeSet<>();
+    public Collection<Student> getAllStudents() throws SQLException {
+        Collection<Student> students = new Vector<>();
         Statement stmn = null;
         ResultSet rs = null;
         try {
